@@ -4,6 +4,10 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from datetime import datetime
 
+# Constantes para definir o intervalo de datas desejado
+data_inicio = '2023-01-01'
+data_fim = '2023-10-30'
+
 # Carregar os dados
 dolar = pd.read_csv('Dados/BRL=X.csv')
 bvsp = pd.read_csv('Dados/^BVSP.csv')
@@ -23,21 +27,16 @@ gol = gol.sort_values(by='Data')
 petroleo = petroleo.sort_values(by='Data')
 ouro = ouro.sort_values(by='Data')
 
-#print(dolar[dolar['Data'].isnull()])
-#print(bvsp[bvsp['Data'].isnull()])
-#print(gol[gol['Data'].isnull()])
-#print(petroleo[petroleo['Data'].isnull()])
-#print(ouro[ouro['Data'].isnull()])
-
 # Padronizar o formato da data nos conjuntos de dados de Dólar, BVSP e Gol
 petroleo['Data'] = petroleo['Data'].apply(lambda x: datetime.strptime(str(x), "%d%m%Y").strftime('%Y-%m-%d') if len(str(x)) == 8 else None)
 ouro['Data'] = ouro['Data'].apply(lambda x: datetime.strptime(str(x), "%d%m%Y").strftime('%Y-%m-%d') if len(str(x)) == 8 else None)
 
-#dolar.to_csv('Dados/Dolar_Trado_Limpo.csv', index=False)
-#bvsp.to_csv('Dados/BVSP_Trado_Limpo.csv', index=False)
-#gol.to_csv('Dados/Gol_Trado_Limpo.csv', index=False)
-#ouro.to_csv('Dados/Ouro_Trado_Limpo.csv', index=False)
-#petroleo.to_csv('Dados/Petroleo_Trado_Limpo.csv', index=False)
+# Filtrar os dados no intervalo de datas desejado
+dolar = dolar[(dolar['Data'] >= data_inicio) & (dolar['Data'] <= data_fim)]
+bvsp = bvsp[(bvsp['Data'] >= data_inicio) & (bvsp['Data'] <= data_fim)]
+gol = gol[(gol['Data'] >= data_inicio) & (gol['Data'] <= data_fim)]
+petroleo = petroleo[(petroleo['Data'] >= data_inicio) & (petroleo['Data'] <= data_fim)]
+ouro = ouro[(ouro['Data'] >= data_inicio) & (ouro['Data'] <= data_fim)]
 
 # Mesclar os dados em um único DataFrame usando a coluna 'Data' como chave
 merged_data = pd.merge(gol, dolar[['Data', 'Dolar_Close']], on='Data', how='inner')
@@ -65,8 +64,8 @@ model.fit(X_train, y_train)
 predictions = model.predict(X_test)
 
 # Avaliar o desempenho do modelo
-mae = mean_absolute_error(y_test, predictions)
-rmse = mean_squared_error(y_test, predictions, squared=False)
+mean_absolute_error = mean_absolute_error(y_test, predictions)
+mean_squared_error = mean_squared_error(y_test, predictions, squared=False)
 
-print(f'Mean Absolute Error: {mae}')
-print(f'Root Mean Squared Error: {rmse}')
+print(f'Mean Absolute Error: {mean_absolute_error}')
+print(f'Root Mean Squared Error: {mean_squared_error}')

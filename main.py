@@ -1,9 +1,9 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from datetime import datetime
-import matplotlib.pyplot as plt
 
 # Constantes para definir o intervalo de datas desejado (filtro de intervalo de datas)
 #data_inicio = '2023-01-01'
@@ -68,20 +68,16 @@ predict = model.predict(X_test)
 print(f'Mean Absolute Error: {mean_absolute_error(y_test, predict)}')
 print(f'Root Mean Squared Error: {mean_squared_error(y_test, predict, squared=False)}')
 
-# Plotando gráfico para dados de treinamento
-plt.figure(figsize=(12, 6))
-plt.subplot(1, 2, 1)
-plt.scatter(y_train, model.predict(X_train), color='blue')
-plt.title('Previsões vs. Valores Reais (Treinamento)')
-plt.xlabel('Valores Reais')
-plt.ylabel('Previsões')
+# Criar o modelo RandomForestRegressor
+#random_forest_model = RandomForestRegressor(random_state=42)
 
-# Plotando gráfico para dados de teste
-plt.subplot(1, 2, 2)
-plt.scatter(y_test, predict, color='red')
-plt.title('Previsões vs. Valores Reais (Teste)')
-plt.xlabel('Valores Reais')
-plt.ylabel('Previsões')
+# Treinar o modelo RandomForestRegressor
+#random_forest_model.fit(X_train, y_train)
 
-plt.tight_layout()
-plt.show()
+# Fazer predições no conjunto de teste
+#forest_predict = random_forest_model.predict(X_test)
+
+# Avaliar o desempenho do modelo RandomForestRegressor
+#print("Random Forest Regressor:")
+#print(f'Mean Absolute Error: {mean_absolute_error(y_test, forest_predict)}')
+#print(f'Root Mean Squared Error: {mean_squared_error(y_test, forest_predict, squared=False)}')
